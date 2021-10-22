@@ -1,0 +1,10 @@
+.navlink{
+    font-size: 24px;
+  padding: 10px;
+ text-decoration: none;
+ color: teal;
+}
+
+.active{
+    color: tomato;
+}
