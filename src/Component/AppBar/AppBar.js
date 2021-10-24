@@ -1,6 +1,11 @@
-import React from "react";
-import Navigation from "../Navigation/Navigation";
+import React from 'react';
+import Navigation from '../Navigation/Navigation';
 
 export default function AppBar() {
-  return <Navigation />;
+  return (
+    <>
+      <Navigation />
+      <hr />
+    </>
+  );
 }
