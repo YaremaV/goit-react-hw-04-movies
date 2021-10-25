@@ -5,14 +5,11 @@ import PageHeading from '../Component/Heading/Heading';
 import { toast } from 'react-toastify';
 import * as moviesApi from '../api-service/movies-api';
 import 'react-toastify/dist/ReactToastify.css';
+import s from './SASS/HomeViews.module.scss';
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState('');
   const [searchMovies, setSearchMovies] = useState([]);
-
-  // useEffect(() => {
-  //   moviesApi.fetchDetails(movieId).then(setMovies);
-  // }, [movieId]);
 
   const handleImageChange = EventTarget => {
     setMovies(EventTarget.currentTarget.value.toLowerCase());
@@ -33,11 +30,12 @@ export default function MoviesPage() {
   };
 
   return (
-    <>
+    <main className={s.main}>
       <PageHeading text="Search Movies" />
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={s.SearchForm}>
         <input
+          className={s.SearchFormInput}
           type="text"
           autoComplete="off"
           autoFocus
@@ -45,20 +43,32 @@ export default function MoviesPage() {
           value={movies}
           onChange={handleImageChange}
         />
-        <button type="submit">
-          <span>Search</span>
+        <button type="submit" className={s.SearchFormButton}>
+          <span className={s.SearchFormButtonLabel}>Search</span>
         </button>
       </form>
 
       {searchMovies && (
-        <ul>
+        <ul className={s.gallery}>
           {searchMovies.map(search => (
-            <li key={search.id}>
-              <Link to={`/movies/${search.id}`}>{search.title}</Link>
+            <li key={search.id} className={s.gallery__list}>
+              <Link to={`/movies/${search.id}`}>
+                <img
+                  className={s.gallery__image}
+                  src={`https://www.themoviedb.org/t/p/w500${search.poster_path}`}
+                  alt={search.title}
+                />
+                <div className={s.flex}>
+                  <h2 className={s.gallery__title}>{search.title}</h2>
+                  <p className={s.gallery__text}>
+                    {search.release_date.slice(0, 4)}
+                  </p>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
       )}
-    </>
+    </main>
   );
 }

@@ -1,14 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
 import * as moviesApi from '../api-service/movies-api';
 
-export default function MovieDetailsPage() {
+export default function MovieDetailsPage({ movieId }) {
   const [reviews, setReviews] = useState([]);
-  const { movieId } = useParams();
 
   useEffect(() => {
-    moviesApi.fetchMoviesReviews(movieId).then(setReviews);
+    moviesApi.fetchMoviesReviews(movieId).then(res => setReviews(res.results));
   }, [movieId]);
 
-  return;
+  return (
+    <>
+      {reviews && (
+        <ul>
+          {reviews.map(review => (
+            <li key={review.id}>
+              <h3>{review.author_details.name}</h3>
+              <p>{review.content}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
 }

@@ -1,7 +1,7 @@
 import { Route, Switch } from 'react-router';
 import AppBar from './Component/AppBar/AppBar';
 import Container from './Component/Container/Container';
-import './App.css';
+import './App.scss';
 import HomeViews from './views/HomeViews';
 import MoviesPage from './views/MoviesPage';
 import MovieDetailsPage from './views/MovieDetailsPage';
@@ -11,6 +11,7 @@ export default function App() {
   return (
     <Container>
       <AppBar />
+
       <Switch>
         <Route path="/" exact>
           <HomeViews />
@@ -24,6 +25,7 @@ export default function App() {
           <MovieDetailsPage />
         </Route>
       </Switch>
+
       <ToastContainer
         position="top-right"
         autoClose={5000}

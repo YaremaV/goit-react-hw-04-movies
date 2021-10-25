@@ -22,17 +22,17 @@ export function fetchSearch(query) {
 }
 
 export function fetchDetails(moviesId) {
-  return fetchWithErrorHandling(
-    `${BASE_URL}movie/${moviesId}?api_key=${KEY}&page=1&include_adult=false`,
-  );
+  return fetchWithErrorHandling(`${BASE_URL}movie/${moviesId}?api_key=${KEY}`);
 }
 export function fetchMoviesCredits(moviesId) {
   return fetchWithErrorHandling(
-    `${BASE_URL}credits/${moviesId}?api_key=${KEY}&page=1&include_adult=false`,
+    ` ${BASE_URL}movie/${moviesId}/credits?api_key=${KEY}&language=en-US`,
+    // `${BASE_URL}movie/${moviesId}/credits?api_key=${KEY}&language=en-US`,
   );
 }
 export function fetchMoviesReviews(moviesId) {
   return fetchWithErrorHandling(
-    `${BASE_URL}review/${moviesId}?api_key=${KEY}&page=1&include_adult=false `,
+    ` ${BASE_URL}movie/${moviesId}/reviews?api_key=${KEY}&language=en-US&page=1`,
+    // `${BASE_URL}review/${moviesId}?api_key=${KEY} `,
   );
 }
