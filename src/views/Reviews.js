@@ -11,7 +11,7 @@ export default function MovieDetailsPage({ movieId }) {
 
   return (
     <>
-      {reviews && (
+      {reviews ? (
         <ul className={s.reviews__list}>
           {reviews.map(review => (
             <li key={review.id} className={s.reviews__item}>
@@ -20,6 +20,8 @@ export default function MovieDetailsPage({ movieId }) {
             </li>
           ))}
         </ul>
+      ) : (
+        <h4>We don't have any reviews for this movie</h4>
       )}
     </>
   );
