@@ -1,0 +1,17 @@
+.navigation{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.navLink{
+font-size: 24px;
+padding: 10px;
+ text-decoration: none;
+ color: teal;
+}
+
+.active{
+    color: tomato;
+}

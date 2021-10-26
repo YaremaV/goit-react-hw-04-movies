@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as moviesApi from '../api-service/movies-api';
+import s from './SASS/HomeViews.module.scss';
 
 export default function MovieDetailsPage({ movieId }) {
   const [reviews, setReviews] = useState([]);
@@ -11,10 +12,10 @@ export default function MovieDetailsPage({ movieId }) {
   return (
     <>
       {reviews && (
-        <ul>
+        <ul className={s.reviews__list}>
           {reviews.map(review => (
-            <li key={review.id}>
-              <h3>{review.author_details.name}</h3>
+            <li key={review.id} className={s.reviews__item}>
+              <h3 className={s.gallery__title}>{review.author_details.name}</h3>
               <p>{review.content}</p>
             </li>
           ))}

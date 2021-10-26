@@ -10,9 +10,11 @@ export default function HomeViews() {
   useEffect(() => {
     moviesApi.fetchPopular().then(res => setPopularMovies(res.results));
   }, []);
+
   return (
     <main className={s.main}>
       <PageHeading text="Popular Movies" />
+
       {popularMovies && (
         <ul className={s.gallery}>
           {popularMovies.map(popular => (
@@ -26,7 +28,7 @@ export default function HomeViews() {
                 <div className={s.flex}>
                   <h2 className={s.gallery__title}>{popular.title}</h2>
                   <p className={s.gallery__text}>
-                    {popular.release_date.slice(0, 4)}
+                    {popular.release_date?.slice(0, 4)}
                   </p>
                 </div>
               </Link>

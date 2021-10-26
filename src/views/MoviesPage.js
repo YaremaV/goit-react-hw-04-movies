@@ -6,10 +6,12 @@ import { toast } from 'react-toastify';
 import * as moviesApi from '../api-service/movies-api';
 import 'react-toastify/dist/ReactToastify.css';
 import s from './SASS/HomeViews.module.scss';
+import Error from '../Component/Error/Error';
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState('');
   const [searchMovies, setSearchMovies] = useState([]);
+  const [error, setError] = useState(null);
 
   const handleImageChange = EventTarget => {
     setMovies(EventTarget.currentTarget.value.toLowerCase());
@@ -25,7 +27,12 @@ export default function MoviesPage() {
       });
       return;
     }
-    moviesApi.fetchSearch(movies).then(res => setSearchMovies(res.results));
+    moviesApi
+      .fetchSearch(movies)
+      .then(res => setSearchMovies(res.results))
+      .catch(error => {
+        setError(error);
+      });
     setMovies('');
   };
 
@@ -47,6 +54,8 @@ export default function MoviesPage() {
           <span className={s.SearchFormButtonLabel}>Search</span>
         </button>
       </form>
+
+      {error && <Error message={error.message} />}
 
       {searchMovies && (
         <ul className={s.gallery}>

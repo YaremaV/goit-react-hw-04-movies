@@ -10,7 +10,7 @@ export default function MovieDetailsPage({ movieId }) {
   }, [movieId]);
 
   return (
-    <main className={s.main}>
+    <div className={s.casts}>
       {casts && (
         <ul className={s.gallery}>
           {casts.map(cast => (
@@ -27,6 +27,6 @@ export default function MovieDetailsPage({ movieId }) {
           ))}
         </ul>
       )}
-    </main>
+    </div>
   );
 }

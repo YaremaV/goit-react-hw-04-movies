@@ -24,28 +24,36 @@ export default function MovieDetailsPage() {
       <PageHeading text={movies.title} />
       <button type="button">Back</button>
       {movies && (
-        <div className={s.flex}>
+        <div className={(s.film__image, s.flex)}>
           <img className={s.image} src={poster} alt={movies.title} />
-          <div>
-            <h3>{movies.release_date}</h3>
-            <p>User score: {movies.vote_average}</p>
-            <h3>Overview</h3>
-            <p>{movies.overview}</p>
-            <h3>Genres</h3>
+          <div className={s.film__information}>
+            <h3 className={s.film__title}>
+              {movies.release_date?.slice(0, 4)}
+            </h3>
+
+            <ul className={s.flex}>
+              {movies.genres?.map(genre => (
+                <li key={genre.id} className={s.film__item}>
+                  <p className={s.film__details}>{genre.name}</p>
+                </li>
+              ))}
+            </ul>
+
+            <p className={s.film__details}>User score: {movies.vote_average}</p>
+            <h3 className={s.film__title}>Overview</h3>
+            <p className={s.film__details}>{movies.overview}</p>
           </div>
         </div>
       )}
-      <hr />
-      <h4>Aditional information</h4>
 
+      <hr />
+      <h4>Additional information</h4>
       <NavLink to={`${url}/cast`}>Casts</NavLink>
       <br />
       <NavLink to={`${url}/reviews`}>Reviews</NavLink>
-
       <Route path={`${url}/cast`}>
         {movies && <Casts movieId={movieId} />}
       </Route>
-
       <Route path={`${url}/reviews`}>
         {movies && <Reviews movieId={movieId} />}
       </Route>

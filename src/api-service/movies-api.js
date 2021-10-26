@@ -1,9 +1,8 @@
 const BASE_URL = 'https://api.themoviedb.org/3/';
 const KEY = 'ec3ebd5ae8fa377543d5c9d8eab61a1b';
-// const KEY = '47af3f3eb3cebf089eb55cbdac9542a5';
 
-async function fetchWithErrorHandling(url = '', config = {}) {
-  const response = await fetch(url, config);
+async function fetchWithErrorHandling(url = '') {
+  const response = await fetch(url);
   return response.ok
     ? await response.json()
     : Promise.reject(new Error('Not found'));
@@ -27,12 +26,10 @@ export function fetchDetails(moviesId) {
 export function fetchMoviesCredits(moviesId) {
   return fetchWithErrorHandling(
     ` ${BASE_URL}movie/${moviesId}/credits?api_key=${KEY}&language=en-US`,
-    // `${BASE_URL}movie/${moviesId}/credits?api_key=${KEY}&language=en-US`,
   );
 }
 export function fetchMoviesReviews(moviesId) {
   return fetchWithErrorHandling(
     ` ${BASE_URL}movie/${moviesId}/reviews?api_key=${KEY}&language=en-US&page=1`,
-    // `${BASE_URL}review/${moviesId}?api_key=${KEY} `,
   );
 }
