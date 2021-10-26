@@ -11,7 +11,7 @@ export default function MovieDetailsPage({ movieId }) {
 
   return (
     <>
-      {reviews ? (
+      {reviews.length ? (
         <ul className={s.reviews__list}>
           {reviews.map(review => (
             <li key={review.id} className={s.reviews__item}>
