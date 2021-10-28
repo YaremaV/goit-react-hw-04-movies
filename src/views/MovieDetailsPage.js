@@ -1,45 +1,49 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import {
+  useParams,
+  Route,
+  useRouteMatch,
+  useHistory,
+  useLocation,
+} from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { Route } from 'react-router';
-import { useRouteMatch } from 'react-router';
-import { useHistory } from 'react-router';
+import { lazy, Suspense } from 'react';
 import * as moviesApi from '../api-service/movies-api';
 import PageHeading from '../Component/Heading/Heading';
-import Casts from './Cast';
-import Reviews from './Reviews';
+import Button from '../Component/Button/Button';
+import Loader from 'react-loader-spinner';
 import s from './SASS/HomeViews.module.scss';
+
+const Casts = lazy(() => import('./Cast'));
+const Reviews = lazy(() => import('./Reviews'));
 
 export default function MovieDetailsPage() {
   const { url } = useRouteMatch();
   const { movieId } = useParams();
   const [movies, setMovies] = useState([]);
   const history = useHistory();
-  const poster = `https://www.themoviedb.org/t/p/w500${movies.poster_path}`;
+  const location = useLocation();
+  console.log(location);
 
   useEffect(() => {
     moviesApi.fetchDetails(movieId).then(setMovies);
   }, [movieId]);
 
-  function goBack() {
-    const historyURL = history.location.pathname;
-
-    if (historyURL.includes('cast') || historyURL.includes('reviews')) {
-      history.go(-1);
-    }
-
-    history.goBack();
-  }
+  const goBack = () => {
+    history.push(location?.state?.from ?? '/');
+  };
 
   return (
     <main className={s.main}>
       <PageHeading text={movies.title} />
-      <button type="button" onClick={goBack} className={s.button}>
-        &#10094; Back
-      </button>
+      <Button onClick={goBack} />
       {movies && (
         <div className={(s.film__image, s.flex)}>
-          <img className={s.image} src={poster} alt={movies.title} />
+          <img
+            className={s.image}
+            src={`https://www.themoviedb.org/t/p/w500${movies.poster_path}`}
+            alt={movies.title}
+          />
           <div className={s.film__information}>
             <h3 className={s.film__title}>
               {movies.release_date?.slice(0, 4)}
@@ -64,16 +68,48 @@ export default function MovieDetailsPage() {
       )}
 
       <hr />
-      <h4>Additional information</h4>
-      <NavLink to={`${url}/cast`}>Casts</NavLink>
-      <br />
-      <NavLink to={`${url}/reviews`}>Reviews</NavLink>
-      <Route path={`${url}/cast`}>
-        {movies && <Casts movieId={movieId} />}
-      </Route>
-      <Route path={`${url}/reviews`}>
-        {movies && <Reviews movieId={movieId} />}
-      </Route>
+      <h4 className={s.gallery__title}>Additional information</h4>
+      <div className={s.flex}>
+        <NavLink
+          to={{
+            pathname: `${url}/cast`,
+            state: { from: location },
+          }}
+        >
+          <button type="button" className={s.button}>
+            Casts
+          </button>
+        </NavLink>
+        <br />
+        <NavLink
+          to={{
+            pathname: `${url}/reviews`,
+            state: { from: location },
+          }}
+        >
+          <button type="button" className={s.button}>
+            Reviews
+          </button>
+        </NavLink>
+      </div>
+      <Suspense
+        fallback={
+          <Loader
+            type="ThreeDots"
+            color="teal"
+            height={300}
+            width={300}
+            timeout={3000}
+          />
+        }
+      >
+        <Route path={`${url}/cast`}>
+          {movies && <Casts movieId={movieId} />}
+        </Route>
+        <Route path={`${url}/reviews`}>
+          {movies && <Reviews movieId={movieId} />}
+        </Route>
+      </Suspense>
     </main>
   );
 }

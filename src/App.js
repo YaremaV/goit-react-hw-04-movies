@@ -1,30 +1,45 @@
 import { Route, Switch } from 'react-router';
+import { lazy, Suspense } from 'react';
 import AppBar from './Component/AppBar/AppBar';
 import Container from './Component/Container/Container';
 import './App.scss';
-import HomeViews from './views/HomeViews';
-import MoviesPage from './views/MoviesPage';
-import MovieDetailsPage from './views/MovieDetailsPage';
 import { ToastContainer } from 'react-toastify';
+import Loader from 'react-loader-spinner';
+
+const HomeViews = lazy(() => import('./views/HomeViews'));
+const MoviesPage = lazy(() => import('./views/MoviesPage'));
+const MovieDetailsPage = lazy(() => import('./views/MovieDetailsPage'));
 
 export default function App() {
   return (
     <Container>
       <AppBar />
 
-      <Switch>
-        <Route path="/" exact>
-          <HomeViews />
-        </Route>
+      <Suspense
+        fallback={
+          <Loader
+            type="ThreeDots"
+            color="teal"
+            height={300}
+            width={300}
+            timeout={3000}
+          />
+        }
+      >
+        <Switch>
+          <Route path="/" exact>
+            <HomeViews />
+          </Route>
 
-        <Route path="/movies" exact>
-          <MoviesPage />
-        </Route>
+          <Route path="/movies" exact>
+            <MoviesPage />
+          </Route>
 
-        <Route path="/movies/:movieId">
-          <MovieDetailsPage />
-        </Route>
-      </Switch>
+          <Route path="/movies/:movieId">
+            <MovieDetailsPage />
+          </Route>
+        </Switch>
+      </Suspense>
 
       <ToastContainer
         position="top-right"

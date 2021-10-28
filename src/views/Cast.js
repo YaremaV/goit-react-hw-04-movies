@@ -21,8 +21,9 @@ export default function MovieDetailsPage({ movieId }) {
                 alt={cast.original_name}
               />
               <h3 className={s.gallery__title}>{cast.name}</h3>
-              <p className={s.gallery__text}>Character: {cast.character}</p>
-              <p className={s.gallery__text}>Popularity: {cast.popularity}</p>
+              <p className={s.gallery__text}>
+                <strong>Character:</strong> {cast.character}
+              </p>
             </li>
           ))}
         </ul>

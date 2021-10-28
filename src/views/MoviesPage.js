@@ -1,59 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router';
 import PageHeading from '../Component/Heading/Heading';
 // import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import * as moviesApi from '../api-service/movies-api';
-import 'react-toastify/dist/ReactToastify.css';
 import s from './SASS/HomeViews.module.scss';
 import Error from '../Component/Error/Error';
+import Searchbar from '../Component/Searchbar/Searchbar';
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState('');
   const [searchMovies, setSearchMovies] = useState([]);
   const [error, setError] = useState(null);
+  const location = useLocation();
+  const history = useHistory();
 
-  const handleImageChange = EventTarget => {
-    setMovies(EventTarget.currentTarget.value.toLowerCase());
-  };
+  useEffect(() => {
+    const queryValue = new URLSearchParams(location.search).get('movies');
 
-  const handleSubmit = evt => {
-    evt.preventDefault();
-
-    if (movies.trim() === '') {
-      toast.error('Please Enter movies name!', {
-        position: 'top-left',
-        theme: 'colored',
-      });
+    if (queryValue === null) {
       return;
     }
+
+    setMovies(queryValue);
+  }, [location.search]);
+
+  useEffect(() => {
+    if (movies === '') {
+      return;
+    }
+
     moviesApi
       .fetchSearch(movies)
       .then(res => setSearchMovies(res.results))
       .catch(error => {
         setError(error);
       });
-    setMovies('');
+  }, [movies]);
+
+  // const handleImageChange = EventTarget => {
+  //   setMovies(EventTarget.currentTarget.value.toLowerCase());
+  // };
+
+  const handleSubmit = value => {
+    history.push({ ...location, search: `movies=${value}` });
+    setMovies(value);
   };
 
   return (
     <main className={s.main}>
       <PageHeading text="Search Movies" />
-
-      <form onSubmit={handleSubmit} className={s.SearchForm}>
-        <input
-          className={s.SearchFormInput}
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search movies"
-          value={movies}
-          onChange={handleImageChange}
-        />
-        <button type="submit" className={s.SearchFormButton}>
-          <span className={s.SearchFormButtonLabel}>Search</span>
-        </button>
-      </form>
+      <Searchbar onSubmit={handleSubmit} />
 
       {error && <Error message={error.message} />}
 
@@ -61,7 +58,12 @@ export default function MoviesPage() {
         <ul className={s.gallery}>
           {searchMovies.map(search => (
             <li key={search.id} className={s.gallery__list}>
-              <Link to={`/movies/${search.id}`}>
+              <Link
+                to={{
+                  pathname: `/movies/${search.id}`,
+                  state: { from: location },
+                }}
+              >
                 <img
                   className={s.gallery__image}
                   src={`https://www.themoviedb.org/t/p/w500${search.poster_path}`}
