@@ -5,7 +5,6 @@ export default function AppBar() {
   return (
     <>
       <Navigation />
-      <hr />
     </>
   );
 }
